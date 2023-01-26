@@ -1,0 +1,1 @@
+/home/asmelkowski/dev/vyze/dotfiles/functions.sh
