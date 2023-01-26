@@ -41,20 +41,33 @@ bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOU
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
 
+# Gaps
+# Inner gaps for all windows: space between two adjacent windows (or split containers).
+# gaps inner <gap_size>[px]
+gaps inner 10
+
+# Outer gaps for all windows: space along the screen edges.
+# gaps outer|horizontal|vertical|top|left|bottom|right <gap_size>[px]
+gaps left 2
+gaps right 2
+gaps top 2
+gaps bottom 2
+
 # start a terminal
+#bindsym $mod+Return exec i3-sensible-terminal
 bindsym $mod+Return exec kitty
 
 # kill focused window
 bindsym $mod+Shift+q kill
 
 # start dmenu (a program launcher)
-#bindsym $mod+d exec --no-startup-id dmenu_run
-bindsym $mod+d exec --no-startup-id rofi -show drun
-# A more modern dmenu replacement is rofi:
-# bindcode $mod+40 exec "rofi -modi drun,run -show drun"
-# There also is i3-dmenu-desktop which only displays applications shipping a
-# .desktop file. It is a wrapper around dmenu, so you need that installed.
-# bindcode $mod+40 exec --no-startup-id i3-dmenu-desktop
+#bindsym $mod+d exec dmenu_run
+#bindsym $mod+d exec --no-startup-id "rofi -show drun
+bindsym $mod+d exec --no-startup-id rofi -no-config -no-lazy-grab -show drun -theme ~/.config/polybar/forest/scripts/rofi/launcher.rasi
+# There also is the (new) i3-dmenu-desktop which only displays applications
+# shipping a .desktop file. It is a wrapper around dmenu, so you need that
+# installed.
+# bindsym $mod+d exec --no-startup-id i3-dmenu-desktop
 
 # change focus
 bindsym $mod+j focus left
@@ -144,7 +157,7 @@ bindsym $mod+Shift+9 move container to workspace number $ws9
 bindsym $mod+Shift+0 move container to workspace number $ws10
 
 # reload the configuration file
-bindsym $mod+Shift+x reload
+bindsym $mod+Shift+c reload
 # restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
 bindsym $mod+Shift+r restart
 # exit i3 (logs you out of your X session)
@@ -176,7 +189,19 @@ mode "resize" {
 }
 
 bindsym $mod+r mode "resize"
-set $Locker i3lock && sleep 1
+
+# Start i3bar to display a workspace bar (plus the system information i3status
+# finds out, if available)
+#bar {
+#	position top
+#        status_command i3status
+#}
+#exec_always --no-startup-id $HOME/.config/polybar/launch.sh
+exec_always --no-startup-id  $HOME/.config/scripts/wallpaper.sh &
+exec_always --no-startup-id  $HOME/.config/polybar/forest/launch.sh
+exec_always --no-startup-id ~/.config/dunst/dunst.sh
+
+set $Locker ~/.config/scripts/lock.sh && sleep 1
 
 set $mode_system System (l) lock, (e) logout, (s) suspend, (h) hibernate, (r) reboot, (Shift+s) shutdown
 mode "$mode_system" {
@@ -185,33 +210,41 @@ mode "$mode_system" {
     bindsym s exec --no-startup-id $Locker && systemctl suspend, mode "default"
     bindsym h exec --no-startup-id $Locker && systemctl hibernate, mode "default"
     bindsym r exec --no-startup-id systemctl reboot, mode "default"
-    bindsym Shift+s exec --no-startup-id systemctl poweroff, mode "default"
+    bindsym Shift+s exec --no-startup-id systemctl poweroff -i, mode "default"
 
     # back to normal: Enter or Escape
     bindsym Return mode "default"
     bindsym Escape mode "default"
 }
+
 bindsym $mod+Shift+e mode "$mode_system"
+bindsym $mod+Shift+Print exec "flameshot gui"
+bindsym $mod+F6 exec "sudo brightnessctl set 5%-"
+bindsym $mod+c exec "rofi -modi 'clipboard:greenclip print' -show clipboard -run-command '{cmd}' -theme ~/.config/polybar/forest/scripts/rofi/launcher.rasi"
+bindsym $mod+b exec "./rofi-bluetooth/rofi-bluetooth -theme ~/.config/polybar/forest/scripts/rofi/launcher.rasi"
 
-# Start i3bar to display a workspace bar (plus the system information i3status
-# finds out, if available)
-#bar {
-#        status_command i3status
-#}
-exec_always --no-startup-id ~/.config/polybar/polybar.sh > ~/polybar.log 2>&1 &
+workspace 1 output eDP-1
+workspace 2 output HDMI-1
+workspace 3 output HDMI-1
+workspace 4 output eDP-1
 
-# exec --no-startup-id i3-msg 'workspace 1; append_layout ~/.config/i3/workspace-1.json'
-# exec --no-startup-id i3-msg 'workspace 1; exec kitty'
+exec --no-startup-id i3-msg 'workspace 1; exec kitty'
+exec --no-startup-id i3-msg 'workspace 1; exec slack'
+exec --no-startup-id i3-resurrect restore -w 1 --layout-only
 
-# exec --no-startup-id i3-msg 'workspace 2; append_layout ~/.config/i3/workspace-2.json'
-# exec --no-startup-id i3-msg 'workspace 2; exec /opt/brave.com/brave/brave'
+exec --no-startup-id i3-msg 'workspace 2; exec firefox -p "work"'
+exec --no-startup-id i3-resurrect restore -w 2 --layout-only
 
-# exec --no-startup-id i3-msg 'workspace 3; append_layout ~/.config/i3/workspace-3.json'
-# exec --no-startup-id i3-msg 'workspace 3; exec /opt/brave.com/brave/brave'
-# exec --no-startup-id i3-msg 'workspace 3; exec code'
-# exec --no-startup-id i3-msg 'workspace 3; exec kitty'
-# exec --no-startup-id i3-msg 'workspace 3; exec kitty'
+exec --no-startup-id i3-msg 'workspace 3; exec code /home/asmelkowski/dev/solarmonkey/app'
+exec --no-startup-id i3-msg 'workspace 3; exec code /home/asmelkowski/dev/solarmonkey/rainforest'
+exec --no-startup-id i3-resurrect restore -w 3 --layout-only
 
-# exec --no-startup-id i3-msg 'workspace 4; append_layout ~/.config/i3/workspace-4.json'
-# exec --no-startup-id i3-msg 'workspace 4; exec /opt/brave.com/brave/brave'
-# exec --no-startup-id i3-msg 'workspace 4; exec /opt/Signal/signal-desktop'
+exec --no-startup-id i3-msg 'workspace 4; exec firefox -p "prv"'
+exec --no-startup-id i3-resurrect restore -w 4 --layout-only
+
+exec --no-startup-id i3-msg 'workspace 5; exec zoom'
+exec --no-startup-id i3-resurrect restore -w 5 --layout-only
+
+exec --no-startup-id greenclip daemon>/dev/null
+
+for_window [class="gnome-calculator"] floating enable
