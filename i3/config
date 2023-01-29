@@ -197,9 +197,6 @@ bindsym $mod+r mode "resize"
 #        status_command i3status
 #}
 #exec_always --no-startup-id $HOME/.config/polybar/launch.sh
-exec_always --no-startup-id  $HOME/.config/scripts/wallpaper.sh &
-exec_always --no-startup-id  $HOME/.config/polybar/forest/launch.sh
-exec_always --no-startup-id ~/.config/dunst/dunst.sh
 
 set $Locker ~/.config/scripts/lock.sh && sleep 1
 
@@ -222,6 +219,10 @@ bindsym $mod+Shift+Print exec "flameshot gui"
 bindsym $mod+F6 exec "sudo brightnessctl set 5%-"
 bindsym $mod+c exec "rofi -modi 'clipboard:greenclip print' -show clipboard -run-command '{cmd}' -theme ~/.config/polybar/forest/scripts/rofi/launcher.rasi"
 bindsym $mod+b exec "./rofi-bluetooth/rofi-bluetooth -theme ~/.config/polybar/forest/scripts/rofi/launcher.rasi"
+
+exec_always --no-startup-id  $HOME/.config/scripts/wallpaper.sh &
+exec_always --no-startup-id  $HOME/.config/polybar/adam/scripts/launch.sh
+exec_always --no-startup-id ~/.config/dunst/dunst.sh
 
 workspace 1 output eDP-1
 workspace 2 output HDMI-1

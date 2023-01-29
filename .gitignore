@@ -23,4 +23,5 @@
 
 !scripts
 !scripts/**/*
+scripts/**/*.log
 
