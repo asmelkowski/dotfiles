@@ -1,0 +1,27 @@
+# Exclude all
+*
+
+# Except for
+!.gitignore
+!dunst
+!dunst/**/*
+
+!i3
+!i3/**/*
+
+!i3-resurrect
+!i3-resurrect/**/*
+
+!kitty
+!kitty/**/*
+
+!polybar
+!polybar/**/*
+
+!rofi
+!rofi/**/*
+
+!scripts
+!scripts/**/*
+scripts/**/*.log
+
