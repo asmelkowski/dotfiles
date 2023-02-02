@@ -81,6 +81,7 @@ plugins=(
     virtualenv
     )
 source $ZSH/oh-my-zsh.sh
+source $HOME/.zshenv
 source $HOME/functions.sh
 source $HOME/aliases.sh
 

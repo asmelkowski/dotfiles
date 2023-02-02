@@ -1,20 +1,21 @@
-function bwu() {
-    source $HOME/.bw_session
+function bwwu() {
+    touch $BITWARDENCLI_APPDATA_DIR_WORK/.bw_session
+    source $BITWARDENCLI_APPDATA_DIR_WORK/.bw_session
     if [[ -z "${BW_SESSION}" ]]; then
-        BW_STATUS=$(bw status | jq -r .status)
+        BW_STATUS=$(bww status | jq -r .status)
     else
-        BW_STATUS=$(bw status --session $BW_SESSION | jq -r .status)
+        BW_STATUS=$(bww status --session $BW_SESSION | jq -r .status)
     fi
     case "$BW_STATUS" in
     "unauthenticated")
         echo "Logging into BitWarden"n
-        BW_SESSION=$(bw login --raw)N
-        echo "BW_SESSION=$BW_SESSION" > $HOME/.bw_session
+        BW_SESSION=$(bww login --raw)N
+        echo "BW_SESSION=$BW_SESSION" > $BITWARDENCLI_APPDATA_DIR_WORK/.bw_session
         ;;
     "locked")
         echo "Unlocking Vault"
-        BW_SESSION=$(bw unlock --raw)
-        echo "BW_SESSION=$BW_SESSION" > $HOME/.bw_session
+        bw_SESSION=$(bww unlock --raw)
+        echo "BW_SESSION=$BW_SESSION" > $BITWARDENCLI_APPDATA_DIR_WORK/.bw_session
         ;;
     "unlocked")
         echo "Vault is unlocked"
@@ -24,19 +25,61 @@ function bwu() {
         return 1
         ;;
     esac
-    bw sync --session $BW_SESSION
+    bww sync --session $BW_SESSION
 }
 
-function bwg() {
-    source $HOME/.bw_session
+function bwwg() {
+    source $BITWARDENCLI_APPDATA_DIR_WORK/.bw_session
     echo 'Copying to clipboard...'
-    bw get --session $BW_SESSION $1 $2 | xclip -selection c
+    bww get --session $BW_SESSION $1 $2 | xclip -selection c
     echo "Copied!"
 }
 
-function bwe() {
-    source $HOME/.bw_session
-    echo $(bw get --session $BW_SESSION $1 $2)
+function bwwe() {
+    source $BITWARDENCLI_APPDATA_DIR_WORK/.bw_session
+    echo $(bww get --session $BW_SESSION $1 $2)
+}
+
+function bwpu() {
+    touch $BITWARDENCLI_APPDATA_DIR_PERSONAL/.bw_session
+    source $BITWARDENCLI_APPDATA_DIR_PERSONAL/.bw_session
+    if [[ -z "${BW_SESSION}" ]]; then
+        BW_STATUS=$(bwp status | jq -r .status)
+    else
+        BW_STATUS=$(bwp status --session $BW_SESSION | jq -r .status)
+    fi
+    case "$BW_STATUS" in
+    "unauthenticated")
+        echo "Logging into BitWarden"n
+        BW_SESSION=$(bwp login --raw)N
+        echo "BW_SESSION=$BW_SESSION" > $BITWARDENCLI_APPDATA_DIR_PERSONAL/.bw_session
+        ;;
+    "locked")
+        echo "Unlocking Vault"
+        BW_SESSION=$(bwp unlock --raw)
+        echo "BW_SESSION=$BW_SESSION" > $BITWARDENCLI_APPDATA_DIR_PERSONAL/.bw_session
+        ;;
+    "unlocked")
+        echo "Vault is unlocked"
+        ;;
+    *)
+        echo "Unknown Login Status: $BW_STATUS"
+        return 1
+        ;;
+    esac
+    bwp sync --session $BW_SESSION
+}
+
+function bwpg() {
+    source $BITWARDENCLI_APPDATA_DIR_PERSONAL/.bw_session
+    echo 'Copying to clipboard...'
+    bwp get --session $BW_SESSION $1 $2 | xclip -selection c
+    echo "Copied!"
+}
+
+function bwpe() {
+    source $BITWARDENCLI_APPDATA_DIR_PERSONAL/.bw_session
+    echo $(bwp get --session $BW_SESSION $1 $2)
 }
 
 function checkout-latest-tag() {

@@ -1,7 +1,7 @@
 export PATH="/home/asmelkowski/.local/bin:/usr/local/go/bin:$PATH"
 export NVM_DIR="$HOME/.nvm"
 export SUDO_ASKPASS="$HOME/askpass.sh"
-export SSH_ASKPASS="$HOME/ssh_askpass.sh"
+# export SSH_ASKPASS="$HOME/ssh_askpass.sh"
 # cypress
 export CYPRESS_CRASH_REPORTS=0
 
@@ -14,3 +14,6 @@ export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent.socket"
 
 export PYENV_ROOT="$HOME/.pyenv"
 export PATH="$PYENV_ROOT/bin:$PATH"
+export PATH="/home/adam/.local/bin:$PATH"
+export BITWARDENCLI_APPDATA_DIR_WORK="$HOME/.config/bw_cli/work"
+export BITWARDENCLI_APPDATA_DIR_PERSONAL="$HOME/.config/bw_cli/personal"
